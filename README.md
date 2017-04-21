@@ -21,6 +21,7 @@ Note: Describe what goes on each file or how to run it.
 - Project proposal submitted 3/29/17
 - Project github repo initaliized 4/11/17
 - Data and codebook uploaded to repo 4/11/17
+- Upload .csv and .rData versions of datasets for easier use 4/21/17
 
 ## Credits
 Credit to Viola Hilbert, Shashank Shekhr Rai, and Seth Taylor.
