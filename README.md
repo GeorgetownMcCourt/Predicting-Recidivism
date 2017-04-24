@@ -8,10 +8,10 @@ To predict recidvism, we take two approaches. Our first approach uses logistic r
 
 Our second planned approach is a random forest. The use of a random forest neccessarily restricts learning about individual features. Our intent for this approach is to develop as accurate of a prediction of recidivism as possible and compare it to the accuracy of our logistic approach. 
 
-We intend to use k-fold cross-validation for partioning and validation of our predictions. 
+We intend to use k-fold cross-validation for partitioning and validation of our predictions. 
 
 ## Data Used
-The data used in this project comes from the 2004 Survey of Inmates in State Correctional Facilities (SISCF) and the 2004 Survey of Inmates in Federal Correctional Facilities (SIFCF). These surveys, collectively referred to as the 2004 Survey of Inmates in State and Federal Correctional Facilities (SISFCF), provide nationally representative data on inmates held in state prisons and federal prisons for the year 2004. Collected through personal interviews conducted from October 2003 through May 2004, the data captures information about prisoners’ current offense and sentence, criminal history, family background, socio-economic characteristics, prior drug and alcohol use and treatment programs, gun possession and use, as well as prison activities, programs, and services. 
+The data used in this project is retrieved from the 2004 Survey of Inmates in State Correctional Facilities (SISCF) and the 2004 Survey of Inmates in Federal Correctional Facilities (SIFCF). These surveys, collectively referred to as the 2004 Survey of Inmates in State and Federal Correctional Facilities (SISFCF), provide nationally representative data on inmates held in state prisons and federal prisons for the year 2004. Collected through personal interviews conducted from October 2003 through May 2004, the data captures information about prisoners’ current offense and sentence, criminal history, family background, socio-economic characteristics, prior drug and alcohol use and treatment programs, gun possession and use, as well as prison activities, programs, and services. 
 
 This data is maintained by the National Archive of Criminal Justice Data and has been pre-processed to anonymize any potentially identifiable information. 
 
@@ -22,14 +22,14 @@ The .Rscript file "Cleaning and Theoretical Models" is used to extract both the 
 
 To run this script change the working directory to your preferred working directory, and install the package "memisc". This package is used in this script to simplify recoding of variables from survey data. 
 
-Future scripts will set up a k-folds approach, predict recidivism, and measure the accuracy of our models using mean f1 score. 
+Future scripts will set up a k-folds approach, predict recidivism, and measure the accuracy of our models using the measure of Mean Absolute Percentage Error (MAPE). 
 
 ## Progress Log
 - Project data identified and downloaded 3/28/17
 - Project proposal submitted 3/29/17
-- Project github repo initaliized 4/11/17
+- Project github repo initialized 4/11/17
 - Data and codebook uploaded to repo 4/11/17
-- Upload .csv and .rData versions of datasets for easier use 4/21/17
+- Upload .csv and .Rda versions of datasets for easier use 4/21/17
 - Upload .Rscript file that sets up data and runs theoretical models 4/24/17
 
 ## Credits
