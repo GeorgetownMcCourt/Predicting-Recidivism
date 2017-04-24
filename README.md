@@ -4,17 +4,25 @@
 The goal of this project is to analyze correlations between recidivism and socio-economic characteristics, mental health, family background, drug use, type of prior offenses and convictions, etc. to predict the probability of recidivism among prisoners. We intend to make predictions regarding important risk factors and to draw policy conclusions as to how the risk of recidivism can be lowered for different types of (former) prisoners. For instance, identifying certain mental health patterns or drug abuse behaviors that significantly increase the risk of recidivism would help in setting priorities in health care and/or social work care for released prisoners.
 
 ## Use
-TODO: Specific example of what happens in your project (e.g. what's going on under the hood)
+To predict recidvism, we take two approaches. Our first approach uses logistic regression, which allows us to assess how individual features affect recidivism. This enables actionable policy recommmendations to assist released prisoners and prevent recidivism.
+
+Our second planned approach is a random forest. The use of a random forest neccessarily restricts learning about individual features. Our intent for this approach is to develop as accurate of a prediction of recidivism as possible and compare it to the accuracy of our logistic approach. 
+
+We intend to use k-fold cross-validation for partioning and validation of our predictions. 
 
 ## Data Used
 The data used in this project comes from the 2004 Survey of Inmates in State Correctional Facilities (SISCF) and the 2004 Survey of Inmates in Federal Correctional Facilities (SIFCF). These surveys, collectively referred to as the 2004 Survey of Inmates in State and Federal Correctional Facilities (SISFCF), provide nationally representative data on inmates held in state prisons and federal prisons for the year 2004. Collected through personal interviews conducted from October 2003 through May 2004, the data captures information about prisoners’ current offense and sentence, criminal history, family background, socio-economic characteristics, prior drug and alcohol use and treatment programs, gun possession and use, as well as prison activities, programs, and services. 
 
-
 This data is maintained by the National Archive of Criminal Justice Data and has been pre-processed to anonymize any potentially identifiable information. 
 
+The data is split into 4 datasets: full federal data, full state data, federal analysis data, and state analysis data. The full federal and state datasets contain all data collected by the survey as it was entered by the survey enumerators. The analysis datasets contain a selection of variables partially prepared for analysis 
+
 ## Usage
-TODO: Write usage instructions.
-Note: Describe what goes on each file or how to run it.
+The .Rscript file "Cleaning and Theoretical Models" is used to extract both the full datasets and the analysis datasets from this repository and load them into R. The script then cleans and prepares key variables from the analysis datasets for use in our models. Finally, the script runs and summarizes five logistic models that study a range of potentially influential features. 
+
+To run this script change the working directory to your preferred working directory, and install the package "memisc". This package is used in this script to simplify recoding of variables from survey data. 
+
+Future scripts will set up a k-folds approach, predict recidivism, and measure the accuracy of our models using mean f1 score. 
 
 ## Progress Log
 - Project data identified and downloaded 3/28/17
@@ -22,9 +30,10 @@ Note: Describe what goes on each file or how to run it.
 - Project github repo initaliized 4/11/17
 - Data and codebook uploaded to repo 4/11/17
 - Upload .csv and .rData versions of datasets for easier use 4/21/17
+- Upload .Rscript file that sets up data and runs theoretical models 4/24/17
 
 ## Credits
 Credit to Viola Hilbert, Shashank Shekhr Rai, and Seth Taylor.
 
 ## License
-TODO: Write license if you want people to use. Take a look here:  https://choosealicense.com/
+Due to the potentially sensitive ethical nature of this work, we maintain exclusive copyright within the Github Terms of Service. 
