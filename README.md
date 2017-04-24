@@ -18,7 +18,7 @@ This data is maintained by the National Archive of Criminal Justice Data and has
 The data is split into 4 datasets: full federal data, full state data, federal analysis data, and state analysis data. The full federal and state datasets contain all data collected by the survey as it was entered by the survey enumerators. The analysis datasets contain a selection of variables partially prepared for analysis 
 
 ## Usage
-The .Rscript file "Cleaning and Theoretical Models" is used to extract both the full datasets and the analysis datasets from this repository and load them into R. The script then cleans and prepares key variables from the analysis datasets for use in our models. Finally, the script runs and summarizes five logistic models that study a range of potentially influential features. 
+The .Rscript file "Cleaning and Theoretical Models" is used to extract the analysis datasets from this repository and load them into R. The script then cleans and prepares key variables from the analysis datasets for use in our models. Finally, the script runs and summarizes five logistic models that study a range of potentially influential features. 
 
 To run this script change the working directory to your preferred working directory, and install the package "memisc". This package is used in this script to simplify recoding of variables from survey data. 
 
