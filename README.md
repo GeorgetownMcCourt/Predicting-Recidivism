@@ -20,7 +20,7 @@ The data is split into 4 datasets: full federal data, full state data, federal a
 ## Usage
 The .Rscript file "Cleaning and Theoretical Models" is used to extract the analysis datasets from this repository and load them into R. The script then cleans and prepares key variables from the analysis datasets for use in our models. Finally, the script runs and summarizes five logistic models that study a range of potentially influential features. 
 
-The. Rscript file GLM Prediction Model partitions the data into 70/15/15 train, validate, and test datasets and uses bionomial GLM to predict recidivism. Mean F1 is used to measure error in our predictions. Multiple cutoffs are tested and confusion matrixes are generated to examine the tradeoff between sensitivity and specificity in our model.
+The. Rscript file GLM Prediction Model partitions the data into 70/15/15 train, validate, and test datasets and uses binomial GLM to predict recidivism. Mean F1 is used to measure error in our predictions. Multiple cutoffs are tested and confusion matrixes are generated to examine the tradeoff between sensitivity and specificity in our model.
 
 To run this script change the working directory to your preferred working directory, and install the package "memisc". This package is used in this script to simplify recoding of variables from survey data. 
 
