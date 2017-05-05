@@ -20,9 +20,11 @@ The data is split into 4 datasets: full federal data, full state data, federal a
 ## Usage
 The .Rscript file "Cleaning and Theoretical Models" is used to extract the analysis datasets from this repository and load them into R. The script then cleans and prepares key variables from the analysis datasets for use in our models. Finally, the script runs and summarizes five logistic models that study a range of potentially influential features. 
 
+The. Rscript file GLM Prediction Model partitions the data into 70/15/15 train, validate, and test datasets and uses bionomial GLM to predict recidivism. Mean F1 is used to measure error in our predictions. Multiple cutoffs are tested and confusion matrixes are generated to examine the tradeoff between sensitivity and specificity in our model.
+
 To run this script change the working directory to your preferred working directory, and install the package "memisc". This package is used in this script to simplify recoding of variables from survey data. 
 
-Future scripts will set up a k-folds approach, predict recidivism, and measure the accuracy of our models using the measure of Mean Absolute Percentage Error (MAPE). 
+Future scripts will set up a k-folds approach as an alternative to the 70/15/15 partition, and test the predictive accuracy of decision trees, a random forest, and KNN approach in comparision to our GLM approach. 
 
 ## Progress Log
 - Project data identified and downloaded 3/28/17
@@ -31,6 +33,7 @@ Future scripts will set up a k-folds approach, predict recidivism, and measure t
 - Data and codebook uploaded to repo 4/11/17
 - Upload .csv and .Rda versions of datasets for easier use 4/21/17
 - Upload .Rscript file that sets up data and runs theoretical models 4/24/17
+- Upload .Rscript file that uses GLM to predict recidvisim and measures accuracy with Mean F1 5/5/17
 
 ## Credits
 Credit to Viola Hilbert, Shashank Shekhr Rai, and Seth Taylor.
