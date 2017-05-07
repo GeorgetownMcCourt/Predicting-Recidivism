@@ -1,3 +1,5 @@
+#Install.packages("mfx") 
+library(mfx) #Package to calculate marginal effects of logit model
 
 #Creating dataframe of just potential model varaibles and then dropping NAs
 model.var <- c("CH_CRIMHIST_COLLAPSED", "OFFENSE_VIOLENT", "OFFENSE_DRUG","OFFENSE_PROPERTY","SES_PHYSABUSED_EVER","CS_SENTENCEMTH", 
@@ -6,7 +8,7 @@ model.var <- c("CH_CRIMHIST_COLLAPSED", "OFFENSE_VIOLENT", "OFFENSE_DRUG","OFFEN
                "DRUG_COCRKTME", "DRUG_HROPTME", "DRUG_METHATME", "LIFE_SENTENCE", "GENDER", "TYPEOFFENSE", "DRUG_MARIJTME",
                "CH_PRIORARREST_CAT", "SES_LIVE_CHILD_ARREST", "DRUG_ABUSE_ONLY", "DRUG_TRT")
 
-model.data <- full.numeric[,model.var]
+model.data <- full.numeric[model.var]
 
 model.data <- model.data[complete.cases(model.data),]
 
@@ -107,3 +109,9 @@ meanf1(val.real, val.recid) #.794
 #Checking confusion matrix#
 table(val.real, val.recid) #Still close to a good balance
 
+
+##Calculating model with marginal effects
+logitmfx(CH_CRIMHIST_COLLAPSED ~ OFFENSE_VIOLENT + OFFENSE_DRUG + OFFENSE_PROPERTY + CS_SENTENCEMTH +  
+           +              SES_PARENTS_INCARCERATED + SES_FAMILY_INCARCERATED + SES_HASCHILDREN + AGE_CAT + 
+           +              SES_SEXABUSED_EVER + DRUG_ANYREG + state + GENDER + DRUG_COCRKTME + DRUG_HROPTME + DRUG_ANYTME + DRUG_METHATME +
+           +              CH_PRIORARREST_CAT + TYPEOFFENSE + DRUG_TRT + EDUCATION, data = full.numeric, atmean = FALSE, robust = TRUE)
