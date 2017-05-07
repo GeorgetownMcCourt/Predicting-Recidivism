@@ -229,6 +229,9 @@ full.numeric$SES_INCOMEMTH <- recode(full.numeric$SES_INCOMEMTH,
 
 full.numeric$SES_INCOMEMTH <- as.factor(full.numeric$SES_INCOMEMTH)
 
+# Remove Unknown Category from AGE_CAT
+full.numeric$AGE_CAT <- factor(full.numeric$AGE_CAT)
+
 ##Recoding Type of Offense
 ## Removing Missing + non-US education categories from Education 
 full.numeric$TYPEOFFENSE <- as.character(full.numeric$TYPEOFFENSE)
