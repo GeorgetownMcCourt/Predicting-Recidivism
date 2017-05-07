@@ -6,7 +6,7 @@ model.var <- c("CH_CRIMHIST_COLLAPSED", "OFFENSE_VIOLENT", "OFFENSE_DRUG","OFFEN
                "DRUG_COCRKTME", "DRUG_HROPTME", "DRUG_METHATME", "LIFE_SENTENCE", "GENDER", "TYPEOFFENSE", "DRUG_MARIJTME",
                "CH_PRIORARREST_CAT", "SES_LIVE_CHILD_ARREST", "DRUG_ABUSE_ONLY", "DRUG_TRT")
 
-model.data <- full.numeric[model.var]
+model.data <- full.numeric[,model.var]
 
 model.data <- model.data[complete.cases(model.data),]
 
