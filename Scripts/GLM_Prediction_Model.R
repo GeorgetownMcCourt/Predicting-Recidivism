@@ -4,7 +4,7 @@ model.var <- c("CH_CRIMHIST_COLLAPSED", "OFFENSE_VIOLENT", "OFFENSE_DRUG","OFFEN
                  "SES_PARENTS_INCARCERATED", "SES_FAMILY_INCARCERATED", "SES_HASCHILDREN", "AGE_CAT", 
                  "SES_SEXABUSED_EVER", "DRUG_ANYREG", "DRUG_ANYTME", "black.nh", "hispanic", "asian", "state", "EDUCATION","SES_FATHER_INCARCERATED",
                "DRUG_COCRKTME", "DRUG_HROPTME", "DRUG_METHATME", "LIFE_SENTENCE", "GENDER", "TYPEOFFENSE", "DRUG_MARIJTME",
-               "CH_PRIORARREST_CAT", "CH_NUMCAR", "SES_LIVE_CHILD_ARREST", "DRUG_ABUSE_ONLY", "DRUG_TRT")
+               "CH_PRIORARREST_CAT", "SES_LIVE_CHILD_ARREST", "DRUG_ABUSE_ONLY", "DRUG_TRT")
 
 model.data <- full.numeric[model.var]
 
@@ -37,9 +37,9 @@ meanf1 <- function(actual, predicted){
 ###First Predictive Model###
 
 glm.fit <- glm(CH_CRIMHIST_COLLAPSED ~ OFFENSE_VIOLENT + OFFENSE_DRUG + OFFENSE_PROPERTY + CS_SENTENCEMTH +  
-                 SES_PARENTS_INCARCERATED + SES_FAMILY_INCARCERATED + SES_HASCHILDREN + AGE_CAT + CH_NUMCAR +
-                 SES_SEXABUSED_EVER + DRUG_ANYREG + state + GENDER + DRUG_COCRKTME + CH_PRIORARREST_CAT +
-                  DRUG_ANYTME + TYPEOFFENSE + DRUG_TRT, 
+                 SES_PARENTS_INCARCERATED + SES_FAMILY_INCARCERATED + SES_HASCHILDREN + AGE_CAT + 
+                 SES_SEXABUSED_EVER + DRUG_ANYREG + state + GENDER + DRUG_COCRKTME + DRUG_HROPTME + DRUG_ANYTME + DRUG_METHATME +
+                 CH_PRIORARREST_CAT + TYPEOFFENSE + DRUG_TRT + EDUCATION, 
                data = trainset,
                family = binomial())
 
@@ -62,7 +62,7 @@ train.real[train.real == 1] <- "Recidivist"
 train.real[train.real == 0]  <- "First Timer"
 
 #Calculating Mean-F1 for training set
-meanf1(train.real, train.recid) 
+meanf1(train.real, train.recid) #.801
 
 #Checking confusion matrix#
 table(trainset$CH_CRIMHIST_COLLAPSED, train.recid) #High sensitivity, but low specificity. Probably not what we want. Adjusting cutoff
@@ -78,7 +78,7 @@ val.real[val.real== 1] <- "Recidivist"
 val.real[val.real == 0] <- "First Timer"
 
 
-meanf1(val.real, val.recid) # ~.87
+meanf1(val.real, val.recid) # ~.794
 
 #Checking confusion matrix#
 table(val.recid, val.real) #High sensitivity, but low specificity. Probably not what we want. Adjusting cutoff
@@ -92,7 +92,7 @@ train.recid[train.recid == TRUE] <- "Recidivist"
 train.recid[train.recid == FALSE] <- "First Timer"
 
 # Mean F1
-meanf1(train.real, train.recid) #.844
+meanf1(train.real, train.recid) #.796
 #Checking confusion matrix#
 table(train.real, train.recid) #Pretty close to a good balance
 
@@ -102,7 +102,7 @@ val.recid[val.recid == TRUE] <- "Recidivist"
 val.recid[val.recid == FALSE] <- "First Timer"
 
 # Mean F1
-meanf1(val.real, val.recid) #~.861
+meanf1(val.real, val.recid) #.794
 
 #Checking confusion matrix#
 table(val.real, val.recid) #Still close to a good balance
