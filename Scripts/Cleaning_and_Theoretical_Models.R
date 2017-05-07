@@ -41,10 +41,22 @@ full.an$ID <- as.character(full.an$ID)
 
 #### 2) DATA CLEANING ####
 
-## ultimate goal: dataset that is numeric only (apart from ID Variable)
-
 # replicate dataset in order to check back with orignial dataset if all changes made are true to data
 full.numeric <- full.an
+
+### Generate recidivism variable - running this first to ensure no other recoding interferes with it
+
+full.numeric$CH_CRIMHIST_COLLAPSED <- full.an$CH_CRIMHIST_COLLAPSED # reassign original variable
+
+full.numeric$CH_CRIMHIST_COLLAPSED <- as.character(full.numeric$CH_CRIMHIST_COLLAPSED) #convert to character
+
+full.numeric$CH_CRIMHIST_COLLAPSED <- recode(full.numeric$CH_CRIMHIST_COLLAPSED, #recode
+                                             0 <- "(0000001) First timers",
+                                             1 <- c("(0000002) Recidivist, current or past violent offense", 
+                                                    "(0000003) Recidivist, no current or prior violent offense"),
+                                             otherwise = NA)
+full.numeric$CH_CRIMHIST_COLLAPSED <- as.numeric(as.character(full.numeric$CH_CRIMHIST_COLLAPSED))
+
 
 # create list with factor levels to get idea of categorical values
 levels.list <- vector("list", length = ncol(full.numeric))
@@ -117,25 +129,31 @@ for (i in 2:ncol(full.numeric)) {
   }
 }
 
+##Recoding Gender - this is the only two level variable that is not yes/no, so we run this first so it doesn't get overwritten by the 2 level recode
+full.numeric$GENDER <- as.character(full.numeric$GENDER)
 
-### Generate recidivism variable
+full.numeric$GENDER <- recode(full.numeric$GENDER,
+                              0 <- "(1) Male",
+                              1 <- c("(2) Female"),
+                              otherwise = "copy")
 
-# NB: the recoding for this 4-level variable is completely wrong, because 0000001 = NO in this case; 0000002-0000003 = YES
+full.numeric$GENDER <- as.numeric(full.numeric$GENDER)
 
-full.numeric$CH_CRIMHIST_COLLAPSED <- full.an$CH_CRIMHIST_COLLAPSED # reassign original variable
-
-full.numeric$CH_CRIMHIST_COLLAPSED <- as.character(full.numeric$CH_CRIMHIST_COLLAPSED) #convert to character
-
-full.numeric$CH_CRIMHIST_COLLAPSED <- recode(full.numeric$CH_CRIMHIST_COLLAPSED, #recode
-                                             0 <- "(0000001) First timers",
-                                             1 <- c("(0000002) Recidivist, current or past violent offense", 
-                                                    "(0000003) Recidivist, no current or prior violent offense"),
-                                             otherwise = NA)
-full.numeric$CH_CRIMHIST_COLLAPSED <- as.numeric(as.character(full.numeric$CH_CRIMHIST_COLLAPSED))
-
-# table post changes to make sure recoding was right
-table(full.numeric$CH_CRIMHIST_COLLAPSED)
-table(full.an$CH_CRIMHIST_COLLAPSED)
+#Convert 1 = Yes 2 = No w/ no missing
+for (i in 2:ncol(full.numeric)) {
+  if (is.factor(full.numeric[,i]) == T & length(levels(full.numeric[,i])) == 2) {
+    
+    full.numeric[,i] <- as.character(full.numeric[,i])
+    
+    full.numeric[,i] <- recode(full.numeric[,i],
+                               1 <- "(1) Yes",
+                               0 <- c("(2) No"),
+                               otherwise = NA)
+    
+    full.numeric[,i] <- as.numeric(as.character(full.numeric[,i]))
+    
+  }
+}
 
 # Create Race Dummies
 
@@ -163,9 +181,9 @@ full.numeric$LIFE_SENTENCE <- ifelse(full.numeric$CS_SENTENCEMTH == 10000, 1, 0)
 
 full.numeric$CS_SENTENCEMTH[full.numeric$CS_SENTENCEMTH == 10000] <- NA ## Converts life sentence in months to NA
 
-##Recode SES_PARENTS_INCARCERATED, SES_HASCHILDREN, SES_FAMILY_INCARCERATED
+##Recode SES_PARENTS_INCARCERATED, SES_HASCHILDREN, SES_FAMILY_INCARCERATED, DRUG_TRT, SES_INCOMEILLEGALMTH, SES_INCOMEWELFAREMTH
 
-vars <- c("SES_PARENTS_INCARCERATED", "SES_HASCHILDREN", "SES_FAMILY_INCARCERATED")
+vars <- c("SES_PARENTS_INCARCERATED", "SES_HASCHILDREN", "SES_FAMILY_INCARCERATED", "DRUG_TRT", "SES_INCOMEILLEGALMTH", "SES_INCOMEWELFAREMTH")
 
 # Removes punctuation, spaces, and alphabetic expressions
 
@@ -206,14 +224,29 @@ full.numeric$EDUCATION <- as.factor(full.numeric$EDUCATION)
 full.numeric$SES_INCOMEMTH <- as.character(full.numeric$SES_INCOMEMTH)
 
 full.numeric$SES_INCOMEMTH <- recode(full.numeric$SES_INCOMEMTH,
-                                 NA <- c("(9999997) Don't know","(9999998) Refused","(9999999) Missing"),
-                                 otherwise = "copy")
+                                     NA <- c("(9999997) Don't know","(9999998) Refused","(9999999) Missing"),
+                                     otherwise = "copy")
 
 full.numeric$SES_INCOMEMTH <- as.factor(full.numeric$SES_INCOMEMTH)
 
-# Remove Unknown Category from AGE_CAT
-full.numeric$AGE_CAT <- factor(full.numeric$AGE_CAT)
+##Recoding Type of Offense
+## Removing Missing + non-US education categories from Education 
+full.numeric$TYPEOFFENSE <- as.character(full.numeric$TYPEOFFENSE)
 
+full.numeric$TYPEOFFENSE <- recode(full.numeric$TYPEOFFENSE,
+                                   NA <- c("(9999997) DK/refused","(9999998) Missing", "(9999999) Blank"),
+                                   otherwise = "copy")
+
+full.numeric$TYPEOFFENSE <- as.factor(full.numeric$TYPEOFFENSE)
+
+#Removing missing from Prior Arrests and Prior Incarcerations
+var <- c("CH_PRIORARREST_CAT", "CH_NUMCAR")
+
+for (i in var) {
+  full.numeric[,i] <- recode(full.numeric[,i],
+                             NA <- c(9999997, 9999998, 9999999),
+                             otherwise ="copy")
+}
 
 #### 3) First Logistic Regressions (NO Predictions yet) ####
 
