@@ -35,6 +35,7 @@ Future scripts will set up a k-folds approach as an alternative to the 70/15/15 
 - Upload .Rscript file that sets up data and runs theoretical models 4/24/17
 - Upload .Rscript file that uses GLM to predict recidvisim and measures accuracy with Mean F1 5/5/17
 - Upload .Rscript files that test decision trees, KNN, and random forest 5/7/17
+- Upload final .rmd and .pdf 5/8/17
 
 ## Credits
 Credit to Viola Hilbert, Shashank Shekhr Rai, and Seth Taylor.
