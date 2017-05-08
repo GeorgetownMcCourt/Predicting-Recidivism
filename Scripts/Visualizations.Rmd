@@ -1,0 +1,221 @@
+---
+title: "Visualizations"
+output: html_notebook
+---
+
+
+
+```{Data}
+#Manipulating data to prepare for visulizations
+load("~/Desktop/clean.data.RData") #Refer to the cleaning script. 
+
+graphs <- data.frame(full.numeric$ID, full.numeric$CH_CRIMHIST_COLLAPSED, full.numeric$OFFENSE_VIOLENT, 
+            full.numeric$OFFENSE_DRUG, full.numeric$SES_PHYSABUSED_EVER, full.numeric$CS_SENTENCEMTH, 
+            full.numeric$SES_PARENTS_INCARCERATED, full.numeric$SES_FAMILY_INCARCERATED, full.numeric$SES_HASCHILDREN,
+            full.numeric$AGE_CAT, full.numeric$SES_SEXABUSED_EVER, full.numeric$DRUG_ANYREG, full.numeric$DRUG_ANYTME,
+            full.numeric$black.nh, full.numeric$hispanic, full.numeric$asian, full.numeric$state)
+graphs$Education <- full.numeric$EDUCATION
+graphs$Gender <- full.numeric$GENDER
+
+colnames(graphs) <- gsub("full.numeric.", "", colnames(graphs))
+```
+
+```{r}
+library(plotly)
+library(ggplot2)
+library(grid)
+#install.packages("gridExtra")
+library(gridExtra)
+
+#Graph characteristics of the population
+
+#Age
+ggplot(graphs) + geom_bar(aes(x = graphs$AGE_CAT), color = "navy", fill = "navy")+
+      xlab("Age") + ylab("Number of Prisoners") + ggtitle("Age Distribution")
+
+#Race
+graphs$RACE <- full.numeric$RACE
+ggplot(graphs) + geom_bar(aes(x = graphs$RACE), color = "navy", fill = "navy")+
+      xlab("Race") + ylab("Number of Prisoners") + ggtitle("Distribution of Race") + 
+      scale_x_discrete(labels=c("White", "Black", "Hispanic", "Indian", "Asian", "Multiple", "Missing"))
+
+#Gender
+ggplot(graphs) + geom_bar(aes(x = graphs$Gender), color = "navy", fill = "navy")+
+      xlab("Gender") + ylab("Number of Prisoners") + ggtitle("Gender")
+
+#Education
+graphs$Education <- as.integer(graphs$Education)
+    ggplot(graphs) + geom_bar(aes(x = graphs$Education), color = "navy", fill = "navy")+
+    xlab("Education") + ylab("Number of Prisoners") + ggtitle("Education")
+    
+#Grid Arrange
+    
+```
+
+```{r}
+#Recidivism
+ggplot(graphs) + geom_bar(aes(x = graphs$CH_CRIMHIST_COLLAPSED), color = "navy", fill = "navy")+
+  xlab("Recidivism") + ylab("Number of Prisoners") + ggtitle("Recidivism")   
+
+#Prisoners with Incarcerated Parents
+ggplot(graphs) + geom_bar(aes(x = graphs$SES_PARENTS_INCARCERATED), color = "navy", fill = "navy")+
+  xlab("Parents Incarcerated") + ylab("Number of Prisoners") + ggtitle("Prisoners with Incarcerated Parents")
+
+#Prisoners with Incarcerated Family Members
+ggplot(graphs) + geom_bar(aes(x = graphs$SES_FAMILY_INCARCERATED), color = "navy", fill = "navy")+
+  xlab("Family Incarcerated") + ylab("Number of Prisoners") + ggtitle("Prisoners with Incarcerated Family Members")
+
+#Length of Sentence
+ggplot(graphs) + geom_density(aes(x = graphs$CS_SENTENCEMTH), color = "navy", fill = "navy")+
+  xlab("Sentence in Number of Months") + ylab("Number of Prisoners") + ggtitle("Length of Sentence") +
+  coord_cartesian(xlim=c(0, 2000))
+
+```
+
+```{r}
+#Violent Offenses
+ggplot(graphs) + geom_bar(aes(x = graphs$OFFENSE_VIOLENT), color = "navy", fill = "navy")+
+  xlab("Violent Offenses") + ylab("Number of Prisoners") + ggtitle("Violent Offenses")
+
+#Drug Offenses
+ggplot(graphs) + geom_bar(aes(x = graphs$OFFENSE_DRUG), color = "navy", fill = "navy")+
+  xlab("Drug Offenses") + ylab("Number of Prisoners") + ggtitle("Drug Offenses")
+
+#Use Of Any Illegal Drug Regularly
+ggplot(graphs) + geom_bar(aes(x = graphs$DRUG_ANYREG), color = "navy", fill = "navy")+
+  xlab("Illegal Drug Use") + ylab("Number of Prisoners") + ggtitle("Use Of Any Illegal Drug Regularly")
+
+```
+
+```{r}
+
+#Sexual Abuse
+ggplot(graphs) + geom_bar(aes(x = graphs$SES_SEXABUSED_EVER), color = "navy", fill = "navy")+
+  xlab("Whether Sexually Abused") + ylab("Number of Prisoners") + ggtitle("Sexual Abuse")
+
+#Physically Abused
+ggplot(graphs) + geom_bar(aes(x = graphs$SES_PHYSABUSED_EVER), color = "navy", fill = "navy")+
+  xlab("Physically Abused") + ylab("Number of Prisoners") + ggtitle("Physical Abuse")
+
+#plotly
+p <- plot_ly(x = graphs$SES_SEXABUSED_EVER, type = "histogram", name = 'Sexual Abuse') %>%
+  add_histogram(x = graphs$SES_PHYSABUSED_EVER, name = 'Physical Abuse')%>%
+  layout(title = "Sexual and Physical Abuse", 
+         xaxis = list(title = "Type of Abuse"), 
+                      yaxis = list(title = "Number of Prisoners"))
+p
+```
+
+```{r}
+#Prisoners with Children
+ggplot(graphs) + geom_bar(aes(x = graphs$SES_HASCHILDREN), color = "navy", fill = "navy")+
+  xlab("Prisoners with Children") + ylab("Number of Prisoners") + ggtitle("Prisoners with Children")
+
+#Prisoners with Minor Children
+graphs$SES_NUMOFMINOR_CHILDREN <- full.numeric$SES_NUMOFMINOR_CHILDREN
+graphs$SES_NUMOFMINOR_CHILDREN <- as.factor(graphs$SES_NUMOFMINOR_CHILDREN)
+graphs$SES_NUMOFMINOR_CHILDREN <- as.integer(graphs$SES_NUMOFMINOR_CHILDREN)
+graphs$SES_NUMOFMINOR_CHILDREN <- as.character(graphs$SES_NUMOFMINOR_CHILDREN)
+
+ggplot(graphs) + geom_bar(aes(x = graphs$SES_NUMOFMINOR_CHILDREN), color = "navy", fill = "navy")+
+  xlab("Number of Minor Children") + ylab("Number of Prisoners") + ggtitle("Prisoners with Minor Children")+
+  scale_x_discrete(labels=c("0", "1", "2", "3", "4", "5", "6"))
+
+```
+
+```{r}
+#Length of Sentence and Recidivism
+ggplot(graphs,aes(x=CS_SENTENCEMTH,y=CH_CRIMHIST_COLLAPSED)) +
+  xlab("Length of Sentence") +
+  ylab("Recidivism") +
+  geom_point(alpha = 0.1, colour="navy",size=1) +
+  geom_smooth() + xlab("Length of Sentence") +
+  ylab("Recidivism") +
+  ggtitle("Length of Sentence and Recidivism")
+
+#Length of Sentence and Violent Offences
+ggplot(graphs,aes(x=CS_SENTENCEMTH,y=OFFENSE_VIOLENT)) +
+  xlab("Length of Sentence") +
+  ylab("Violent Crimes") +
+  geom_point(alpha = 0.1, colour="navy",size=1) +
+  geom_smooth() + xlab("Length of Sentence") +
+  ylab("Violent Crimes") +
+  ggtitle("Length of Sentence and Violent Offences")
+
+#Length of Sentence and Drug Offences
+ggplot(graphs,aes(x=CS_SENTENCEMTH,y=OFFENSE_DRUG)) +
+  xlab("Length of Sentence") +
+  ylab("Drug Crimes") +
+  geom_point(alpha = 0.1, colour="navy",size=1) +
+  geom_smooth() + xlab("Length of Sentence") +
+  ylab("Drug Crimes") +
+  ggtitle("Length of Sentence and Drug Offences")
+```
+```{r}
+#Recidivism and Race
+
+graphs$recidivism <- as.character(graphs$CH_CRIMHIST_COLLAPSED)
+graphs$recidivism[graphs$recidivism == 0] <- NA
+graphs$recidivism <- as.numeric(graphs$recidivism)
+graphs$RACE <- as.numeric(graphs$RACE)
+graphs$rac.rec <- graphs$RACE*graphs$recidivism
+graphs$rac.rec <- as.factor(graphs$rac.rec)
+
+rac.rec1 <- as.data.frame(na.omit(graphs$rac.rec))
+
+ggplot(rac.rec1) + geom_bar(aes(x = rac.rec1$`na.omit(graphs$rac.rec)`), color = "navy", fill = "navy")+ xlab("Race") + ylab("Number of Recidivist Prisoners") + ggtitle("Race and Recidivism") + 
+      scale_x_discrete(labels=c("White", "Black", "Hispanic", "Indian", "Asian", "Multiple", "Missing"))
+
+```
+```{r}
+#Education and Recidivism
+graphs$Education <- as.numeric(graphs$Education)
+graphs$Ed.rec <- graphs$Education*graphs$recidivism
+graphs$Ed.rec <- as.factor(graphs$Ed.rec)
+
+Ed.rec1 <- as.data.frame(na.omit(graphs$Ed.rec))
+
+#graph1
+ggplot(Ed.rec1) + geom_bar(aes(x = Ed.rec1$`na.omit(graphs$Ed.rec)`), color = "navy", fill = "navy")+ xlab("Education") + ylab("Number of Recidivist Prisoners") + ggtitle("Education and Recidivism") 
+
+#graph2
+ggplot(Ed.rec1) + geom_density(aes(x = Ed.rec1$`na.omit(graphs$Ed.rec)`), color = "navy", fill = "navy")+ xlab("Education") + ylab("Number of Recidivist Prisoners") + ggtitle("Education and Recidivism") 
+
+#Different graphs?
+
+```
+
+```{r}
+#Recidivism and Drug Crimes
+graphs$OFFENSE_DRUG <- as.numeric(graphs$OFFENSE_DRUG)
+graphs$Drug.rec <- graphs$OFFENSE_DRUG*graphs$recidivism
+graphs$Drug.rec <- as.factor(graphs$Drug.rec)
+
+Drug.rec1 <- as.data.frame(na.omit(graphs$Drug.rec))
+
+ggplot(Drug.rec1) + geom_bar(aes(x = Drug.rec1$`na.omit(graphs$Drug.rec)`), color = "navy", fill = "navy")+ xlab("Drug Crimes") + ylab("Number of Recidivist Prisoners") + ggtitle("Drug Crimes and Recidivism") 
+
+#Recidivism and Violent Crimes
+graphs$OFFENSE_VIOLENT <- as.numeric(graphs$OFFENSE_VIOLENT)
+graphs$Violent.rec <- graphs$OFFENSE_VIOLENT*graphs$recidivism
+graphs$Violent.rec <- as.factor(graphs$Violent.rec)
+
+Violent.rec1 <- as.data.frame(na.omit(graphs$Violent.rec))
+
+ggplot(Violent.rec1) + geom_bar(aes(x = Violent.rec1$`na.omit(graphs$Violent.rec)`), color = "navy", fill = "navy")+ xlab("Violent Crimes") + ylab("Number of Recidivist Prisoners") + ggtitle("Violent Crimes and Recidivism")
+
+#Plotly
+p <- plot_ly(x = graphs$Drug.rec, type = "histogram", name = 'Drug Crimes') %>%
+  add_histogram(x = graphs$Violent.rec, name = 'ViolentCrimes')%>%
+  layout(title = "Recidivism and Type of Crimes", 
+         xaxis = list(title = "Recidivism"), 
+                      yaxis = list(title = "Number of Prisoners"))
+p
+
+```
+
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
+
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Cmd+Shift+K* to preview the HTML file).
